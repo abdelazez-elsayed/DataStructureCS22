@@ -1,3 +1,7 @@
+import java.math.BigInteger; 
+import java.util.Scanner; 
+
+
 public class MySpecialArrayUtils {
   
     public static void reverse (int[] arr){
@@ -22,9 +26,10 @@ public class MySpecialArrayUtils {
     public static double average(int[] arr) {
         double sum;
         for (int i = 0; i < arr.length; i++) {
-            sum = sum + arr[i];
+            double ai= arr[i];
+            sum = sum+ ai/arr.length;
         }
-        return sum / arr.length;
+        return sum;
 
     }
     public static void moveValue(int[] arr, int val){
