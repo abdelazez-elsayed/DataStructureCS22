@@ -1,0 +1,57 @@
+public class MySpecialArrayUtils {
+  
+    public static void reverse (int[] arr){
+        for (int i=0; i<arr.length/2; i++){
+            int h;
+            h= arr[i];
+            arr[i]=arr[arr.length-i-1];
+            arr[arr.length-i-1]=h;
+        }
+    }
+    public static int[] sumEvenOdd (int arr[]){
+        int[] sum = new int[2];
+        for(int i=0; i<arr.length; i++) {
+            if(arr[i]%2==0)
+                sum[0]+=arr[i];
+            else
+                sum[1]+=arr[i];
+        }
+        return  sum;
+
+    }
+    public static double average(int[] arr) {
+        double sum;
+        for (int i = 0; i < arr.length; i++) {
+            sum = sum + arr[i];
+        }
+        return sum / arr.length;
+
+    }
+    public static void moveValue(int[] arr, int val){
+        int e=arr.length-1;
+        int h;
+        for(int i=0; i<arr.length;i++){
+            if(arr[i]==val){
+                h=arr[i];
+                arr[i]=arr[e];
+                arr[e]=h;
+                e--;
+            }
+
+        }
+    }
+    public static int[][] transpose(int[][] arr){
+        int n= arr.length;
+        int m=arr[0].length;
+        int [][] newArr= new int[m][n];
+        for(int i=0; i<n;i++){
+            for(int j=0; j<m; j++) {
+                newArr[j][i] = arr[i][j];
+            }
+        }
+        return newArr;
+    }
+
+
+
+}
