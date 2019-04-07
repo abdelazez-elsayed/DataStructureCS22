@@ -1,0 +1,256 @@
+# DataStructureCS22
+public class LinkedListNode {
+    public int value;
+    public LinkedListNode next;
+    public LinkedListNode (int element, LinkedListNode node)
+    {
+        value = element;
+        next = node;
+    }
+
+    public int getValue() { return value; }
+    public LinkedListNode getNext() { return next; }
+    public void setElement(int newElem) {value = newElem;}
+    public void setNext(LinkedListNode newNext) { next = newNext; }
+}
+public class MySpecialLinkedListUtils {
+    
+    public static double[] summary(LinkedListNode head){
+
+        double[] values = new double[5];
+        if(head==null)
+            return values;
+        //returning sum
+        int counter=0;
+        int max=head.value;
+        int min=head.value;
+        LinkedListNode n=head;
+        do {
+            if(n.value>max)
+                max=n.value;
+            if (n.value<min)
+                min=n.value;
+            values[0] = values[0]+ n.getValue();
+            n=n.getNext();
+            counter++;
+
+
+        }while(n != null);
+        //returning average,maximum and minimum
+        values[3]=max;
+        values[4]=min;
+        values[1]=values[0]/counter;
+         head=mergeSort(head);
+         int i=0;
+         if(counter%2==0){
+            System.out.println("COUNTER IS "+counter);
+             while (i++<(counter/2)-1)
+                 head=head.getNext();
+
+             values[2]=(head.value+head.next.value);
+             values[2] /= 2;
+
+
+         }else {
+             counter--;
+             while (i++<counter/2)
+                 head=head.next;
+             values[2]=head.value;
+
+         }
+
+        return values;
+
+    }
+     public  static  LinkedListNode reverse(LinkedListNode head){
+        if(head==null)return head;
+        LinkedListNode curr = head;
+        LinkedListNode prev = null;
+        LinkedListNode next = null;
+        while (curr != null){
+            next=curr.getNext();
+            curr.next=prev ;
+            prev=curr;
+            curr=next;
+        }
+        head=prev;
+        return head;
+
+
+
+    }
+    public static LinkedListNode evenIndexedElements (LinkedListNode head){
+        int counter =0;
+        LinkedListNode node=head;
+        LinkedListNode start=head;
+        LinkedListNode curr=node;
+
+
+        boolean b= true;
+        while (start !=null)
+        {
+            start=start.next;
+            if(counter%2==1)
+            {
+                curr.next=start;
+                curr=start;
+
+
+                if(b){
+                    node.next=curr;
+                    b=false;
+                }
+
+            }
+            counter++;
+        }
+
+
+        return node;
+    }
+    public static LinkedListNode removeCentralNode(LinkedListNode head){
+        LinkedListNode n=head;
+        int counter=0;
+        while(n!=null){
+            n=n.getNext();
+            counter++;
+        }
+        if(counter==0)return null;
+        System.out.println("Counter is "+counter);
+
+        int i=1;
+        n=head;
+        LinkedListNode curr=n;
+        LinkedListNode tail = head;
+        boolean a =true;
+        int c;
+                if(counter%2==0)
+                    c=counter/2-1;
+                else
+                    c=counter/2;
+        while(i<counter && tail != null){
+            curr=curr.next;
+            if(i!=c) {
+                if(a){
+                    n.next=curr;
+                    a=false;
+                }
+
+                tail.setNext(curr);
+                tail = curr;
+            }
+            i++;
+        }
+
+        return n;
+    }
+    public static LinkedListNode insertionSort(LinkedListNode head) {
+        if (head == null) return null;
+
+        LinkedListNode Sorted = head;
+        head = head.next;
+        Sorted.next=null;
+        while(head != null){
+            final LinkedListNode curr=head;
+            head=head.next;
+            if(curr.value<Sorted.value){
+                curr.next=Sorted;
+                Sorted=curr;
+            }else {
+                LinkedListNode search = Sorted;
+                while (search.next != null && curr.value > search.next.value){
+                    search=search.next;
+                }
+                curr.next=search.next;
+                search.next=curr;
+            }
+        }
+        return Sorted;
+    }
+    public static LinkedListNode getMiddle(LinkedListNode h)
+    {
+        //Base case
+        if (h == null)
+            return h;
+        LinkedListNode fastptr = h.next;
+        LinkedListNode slowptr = h;
+
+        while (fastptr != null)
+        {
+            fastptr = fastptr.next;
+            if(fastptr!=null)
+            {
+                slowptr = slowptr.next;
+                fastptr=fastptr.next;
+            }
+        }
+        return slowptr;
+    }
+  public  static   LinkedListNode  sortedMerge(LinkedListNode headA, LinkedListNode headB)
+    {
+
+
+        LinkedListNode dummyNode = new LinkedListNode(0,null);
+
+        LinkedListNode tail = dummyNode;
+        while(true)
+        {
+            if(headA == null)
+            {
+                tail.next = headB;
+                break;
+            }
+            if(headB == null)
+            {
+                tail.next = headA;
+                break;
+            }
+
+            if(headA.value <= headB.value)
+            {
+                tail.next = headA;
+                headA = headA.next;
+            }
+            else
+            {
+                tail.next = headB;
+                headB = headB.next;
+            }
+
+            /* Advance the tail */
+            tail = tail.next;
+        }
+        return dummyNode.next;
+    }
+    public static LinkedListNode mergeSort(LinkedListNode head){
+
+        if(head==null || head.next==null)return head;
+
+        LinkedListNode middle = getMiddle(head);
+        LinkedListNode nexttomiddle= middle.next;
+        middle.next=null;
+        LinkedListNode left= mergeSort(head);
+        LinkedListNode right = mergeSort(nexttomiddle);
+        LinkedListNode Sorted= sortedMerge(left,right);
+        return Sorted;
+
+
+    }
+    public static boolean palindrome(LinkedListNode head){
+        if(head==null || head.next==null)return true;
+        LinkedListNode n= reverse(head);
+        while(n!= null && head!=null  )
+        {
+         if(n.value != head.value)return false;
+         else {
+             n=n.getNext();
+             head=head.getNext();
+         }
+        }
+        return true;
+    }
+
+
+}
+
+
