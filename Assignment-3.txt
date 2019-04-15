@@ -1,0 +1,207 @@
+public class DLinkedList {
+    Node head;
+    Node tail;
+    int size;
+    public DLinkedList(){
+        size=0;
+        head=null;
+        tail=null;
+    }
+
+    public boolean isEmpty() { return size == 0; }
+    public void addFirst(int a,int b) {
+        Node tmp = new Node(a,b, head, null);
+        if(head != null ) {head.prev = tmp;}
+        head = tmp;
+        if(tail == null) { tail = tmp;}
+        size++;
+    }
+    public void addLast(Node tmp) {
+
+        if(tail != null) {tail.next = tmp;}
+        tail = tmp;
+        if(head == null) { head = tmp;}
+        size++;
+    }
+    public void addLastValue(int a,int b) {
+        Node tmp = new Node(a,b,null,tail);
+        if(tail != null) {tail.next = tmp;}
+        tail = tmp;
+        if(head == null) { head = tmp;}
+        size++;
+    }
+    public void removeFirst() {
+        if (size == 0) throw new NoSuchElementException();
+        Node tmp = head;
+        head = head.next;
+        head.prev = null;
+        size--;
+
+    }
+    public void removeLast() {
+        if (size == 0) throw new NoSuchElementException();
+        Node tmp = tail;
+        tail = tail.prev;
+        tail.next = null;
+        size--;
+
+    }
+
+}
+public class Node{
+        int x;
+        int y;
+        Node next;
+        Node prev;
+public Node(int a,int b,Node ne,Node pr){
+        x=a;
+        y=b;
+        next=ne;
+        prev=pr;
+        }
+
+
+}
+
+/*****************************************************/
+public class findPlayers {
+
+   static  java.awt.Point[] findplayers(String[] photo,int team,int threshold){
+
+        boolean[][] checked= new boolean[photo.length][photo[0].length()];
+        int size=threshold;
+        DLinkedList players = new DLinkedList();
+        for(int i=0;i<photo.length;i++){
+            for(int j=0;j<photo[0].length();j++){
+
+                if(photo[i].charAt(j)==(char) (team+'0') && !checked[i][j]){
+                    checked[i][j]=true;
+                    DLinkedList temp= new DLinkedList();
+                    temp.addFirst(i,j);
+                    temp =  generator(photo,temp,team,checked);
+                    int co=temp.size*4;
+                    if(co>=size){
+                        Node min=getMin(temp);
+                        Node max=getMax(temp);
+                        Node Player=new Node(0,0,null,null);
+                        Player.y=min.x+max.x+1;
+                        Player.x=min.y+max.y+1;
+                        players.addLast(Player);
+
+                    }
+
+                }
+            }
+
+
+        }
+        int counter=players.size;
+        java.awt.Point[] arr=new java.awt.Point[counter];
+        Node first = players.head;
+        int c=0;
+        while (first!=null){
+            java.awt.Point point = new java.awt.Point(0,0);
+            point.setLocation(first.x,first.y);
+            arr[c]=point;
+            first=first.next;
+            c++;
+
+        }
+         sort(arr);
+         for(int i=0;i<arr.length-1;i++){
+             if(arr[i+1].x==arr[i].x){
+                 int j=i;
+                 while (j+1<arr.length&&arr[j].x==arr[j+1].x)j++;
+                 sortY(arr,i,j);
+                 i=j;
+             }
+         }
+        return arr;
+
+
+    }
+    static DLinkedList generator (String[] photo,DLinkedList temp,int teamno,boolean checked[][]){
+            Node v=temp.tail;
+        if(v.y+1<photo[0].length() &&photo[v.x].charAt(v.y+1)==(char) (teamno+'0') && !checked[v.x][v.y+1]){
+            checked[v.x][v.y+1]=true;
+            temp.addLastValue(v.x,v.y+1);
+            temp =generator(photo,temp,teamno,checked);
+        }
+        if(v.x+1<photo.length && photo[v.x+1].charAt(v.y)==(char) (teamno+'0') && !checked[v.x+1][v.y]){
+            checked[v.x+1][v.y]=true;
+            temp.addLastValue(v.x+1,v.y);
+            temp =generator(photo,temp,teamno,checked);
+        }
+        if(v.y-1>=0 &&photo[v.x].charAt(v.y-1)==(char) (teamno+'0') && !checked[v.x][v.y-1]){
+            temp.addLastValue(v.x,v.y-1);
+            checked[v.x][v.y-1]=true;
+            temp=generator(photo,temp,teamno,checked);
+        }
+        if(v.x-1>=0 &&photo[v.x-1].charAt(v.y)==(char) (teamno+'0') && !checked[v.x-1][v.y]){
+            temp.addLastValue(v.x-1,v.y);
+            checked[v.x-1][v.y]=true;
+            temp=generator(photo,temp,teamno,checked);
+        }
+        return temp;
+
+    }
+    static Node getMin(DLinkedList list){
+        Node min=new Node(0,0,null,null);
+        Node v=list.head;
+        min.x=v.x;
+        min.y=v.y;
+        while(v!=null){
+            if(v.x<min.x)min.x=v.x;
+            if(v.y<min.y)min.y=v.y;
+            v=v.next;
+        }
+        return min;
+    }
+          static  Node getMax(DLinkedList list){
+                Node max=new Node(0,0,null,null);
+                Node v=list.head;
+                max.x=v.x;
+                max.y=v.y;
+                while(v!=null){
+                    if(v.x>max.x)max.x=v.x;
+                    if(v.y>max.y)max.y=v.y;
+                    v=v.next;
+                }
+                return max;
+            }
+
+    static void sort(java.awt.Point arr[])
+    {
+        int n = arr.length;
+
+        
+        for (int i = 0; i < n-1; i++)
+        {
+            
+            int min_idx = i;
+            for (int j = i+1; j < n; j++)
+                if (arr[j].x < arr[min_idx].x)
+                    min_idx = j;
+            java.awt.Point temp = new java.awt.Point(arr[min_idx]);
+            arr[min_idx] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    static void sortY(java.awt.Point arr[],int start,int end)
+    {
+        int n = end;
+        for (int i = start; i < n; i++)
+        {
+           
+            int min_idx = i;
+            for (int j = i+1; j < n; j++)
+                if (arr[j].y < arr[min_idx].y)
+                    min_idx = j;
+
+            
+            java.awt.Point temp = new java.awt.Point(arr[min_idx]);
+            arr[min_idx] = arr[i];
+            arr[i] = temp;
+        }
+    }
+}
