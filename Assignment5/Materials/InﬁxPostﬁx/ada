@@ -1,7 +1,0 @@
-/**
-     * taking two operands and operator and makes the operation
-     * @param n1 first operand
-     * @param n2 second operand
-     * @param ch operation symbol
-     * @return the result of the operation
-     */aa
