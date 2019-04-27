@@ -6,7 +6,7 @@ public interface IExpressionEvaluator {
      *          postfix expression
      * @return the expression evaluated value
      */
-    public int evaluate(String expression);
+    public float evaluate(String expression);
     /**
      *  Takes a symbolic/numeric infix expression as input and converts it to
      *  postfix notation. There is no assumption on spaces between terms or the
