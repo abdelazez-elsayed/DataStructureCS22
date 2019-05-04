@@ -1,3 +1,5 @@
+
+package eg.edu.alexu.csd.datastructure.queue;
 import java.util.*;
 
 public class QueueL implements IQueue , ILinkedBased {
